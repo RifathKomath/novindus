@@ -9,8 +9,14 @@ import 'package:noviindus_round_2/shared/widgets/app_svg.dart';
 class DottedVideoUploadBox extends StatelessWidget {
   final String text;
   final String icon;
+  final Widget? child;
 
-  const DottedVideoUploadBox({super.key, required this.text, required this.icon});
+  const DottedVideoUploadBox({
+    super.key,
+    required this.text,
+    required this.icon,
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +34,38 @@ class DottedVideoUploadBox extends StatelessWidget {
           color: const Color(0xFF1C1C1C),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-           AppSvg(assetName: icon),
-            14.h.hBox,
-            Text(
-              text,
-              style: AppTextStyles.textStyle_400_14.copyWith(fontSize: 15,color: whiteClr),
-            ),
-          ],
-        ),
+        child: child != null
+            ? child
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppSvg(assetName: icon),
+                  14.h.hBox,
+                  Text(
+                    text,
+                    style: AppTextStyles.textStyle_400_14.copyWith(
+                      fontSize: 15,
+                      color: whiteClr,
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 }
 
-
 class DottedThumnailUploadBox extends StatelessWidget {
   final String text;
   final String icon;
+  final Widget? child;
 
-  const DottedThumnailUploadBox({super.key, required this.text, required this.icon});
+  const DottedThumnailUploadBox({
+    super.key,
+    required this.text,
+    required this.icon,
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +83,25 @@ class DottedThumnailUploadBox extends StatelessWidget {
           color: const Color(0xFF1C1C1C),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 20,
-          children: [
-           AppSvg(assetName: icon),
-            14.h.hBox,
-            Text(
-              text,
-              style: AppTextStyles.textStyle_400_14.copyWith(fontSize: 15,color: textClr2),
-            ),
-          ],
-        ),
+        child: child != null
+            ? child
+            : Padding(
+                padding: const EdgeInsets.all(38.0),
+                child: Row(
+                  spacing: 15,
+                  children: [
+                    AppSvg(assetName: icon),
+                    14.h.hBox,
+                    Text(
+                      text,
+                      style: AppTextStyles.textStyle_400_14.copyWith(
+                        fontSize: 15,
+                        color: textClr2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }

@@ -283,7 +283,62 @@ class Api {
       );
     }
   }
+
+  static Future<ApiResponse> uploadFilesMap({
+  required String endPoint,
+  required Map<String, File> filesMap,
+  Map<String, String>? fields,
+  bool isShowLoader = false,
+}) async {
+  try {
+    if (isShowLoader) {
+      showLoader();
+    }
+
+    Uri url = Uri.parse("$baseUrl$endPoint");
+    var request = http.MultipartRequest('POST', url);
+
+    request.headers.addAll({
+      "platform": "app",
+      if (accessToken != null && accessToken!.isNotEmpty)
+        "Authorization": "Bearer $accessToken",
+    });
+
+    for (var entry in filesMap.entries) {
+      var f = entry.value;
+      var multipartFile = await http.MultipartFile.fromPath(
+        entry.key,
+        f.path,
+        filename: f.path.split('/').last,
+      );
+      request.files.add(multipartFile);
+    }
+
+    if (fields != null) {
+      request.fields.addAll(fields);
+    }
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    if (isShowLoader) hideLoader();
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    return ApiResponse.fromJson(url, Method.upload, null, responseData);
+  } catch (e) {
+    if (isShowLoader) hideLoader();
+    showToast("Upload failed: $e");
+    return ApiResponse(
+      success: false,
+      msg: "Upload failed: $e",
+      data: null,
+      statusCode: "",
+      response: null,
+    );
+  }
 }
+}
+
+
 
 String _getImageExtension(String fileName) {
   final ext = fileName.split('.').last.toLowerCase();

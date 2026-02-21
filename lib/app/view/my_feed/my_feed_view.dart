@@ -78,11 +78,11 @@ class MyFeedView extends StatelessWidget {
   }
 }
 
-// Custom app bar
 Widget customAppBar({
   required String title,
   bool showButton = false,
   VoidCallback? onTap,
+  RxBool? isLoading,
 }) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 45),
@@ -99,30 +99,42 @@ Widget customAppBar({
           title,
           style: AppTextStyles.textStyle_600_14.copyWith(color: whiteClr),
         ),
-        if (showButton) ...[
+        if (showButton && isLoading != null) ...[
           Spacer(),
-          GestureDetector(
-            onTap: onTap,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              decoration: BoxDecoration(
-                color: redClr2.withOpacity(0.10),
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: redClr2.withOpacity(0.40)),
-              ),
-              child: Center(
-                child: Text(
-                  "Share Post",
-                  style: AppTextStyles.textStyle_400_14.copyWith(
-                    color: whiteClr,
-                    fontSize: 12,
-                  ),
+          Obx(() {
+            return GestureDetector(
+              onTap: isLoading.value ? null : onTap,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                  color: redClr2.withOpacity(0.10),
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: redClr2.withOpacity(0.40)),
+                ),
+                child: Center(
+                  child: isLoading.value
+                      ? SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: const CupertinoActivityIndicator(
+                            color: Colors.white,
+                            radius: 10,
+                          ),
+                        )
+                      : Text(
+                          "Share Post",
+                          style: AppTextStyles.textStyle_400_14.copyWith(
+                            color: whiteClr,
+                            fontSize: 12,
+                          ),
+                        ),
                 ),
               ),
-            ),
-          ).paddingSymmetricHorizontal(16),
+            );
+          }).paddingSymmetricHorizontal(16),
         ],
       ],
     ),
   );
 }
+
