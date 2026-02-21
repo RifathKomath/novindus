@@ -23,10 +23,20 @@ class MyFeedView extends StatelessWidget {
           20.h.hBox,
           Expanded(
             child: Obx(() {
-              if (controller.isLoading.value &&
-                  controller.myFeedResultList.isEmpty) {
+              if (controller.isLoading.value) {
                 return const Center(
                   child: CupertinoActivityIndicator(color: redClr2, radius: 20),
+                );
+              }
+              if (controller.myFeedResultList.isEmpty) {
+                return Center(
+                  child: Text(
+                    "Videos not found",
+                    style: AppTextStyles.textStyle_500_14.copyWith(
+                      color: redClr2,
+                      fontSize: 17
+                    ),
+                  ),
                 );
               }
               return NotificationListener<ScrollNotification>(
@@ -137,4 +147,3 @@ Widget customAppBar({
     ),
   );
 }
-
